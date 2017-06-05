@@ -13,6 +13,7 @@ export default class Game extends React.Component {
       xIsNext: true,
       changed: [0],
       liClass: [0],
+      sorted: false,
     };
   }
 
@@ -49,6 +50,20 @@ export default class Game extends React.Component {
     });
   }
 
+  handleSort() {
+    this.setState(prevState => ({
+      sorted: !prevState.sorted
+    }));
+  }
+
+  sortMoves(i) {
+    if (this.state.sorted) {
+      var sortedMoves = i.reverse();
+      return sortedMoves;
+    }
+    return i;
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -67,14 +82,13 @@ export default class Game extends React.Component {
       );
     });
 
-
     let status;
     if (winner) {
       status = 'Winner: ' + winner;
     } else {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
-
+    const sorted = this.sortMoves(moves);
     return (
       <div className="game">
         <div className="game-board">
@@ -85,7 +99,8 @@ export default class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <ol>{sorted}</ol>
+          <button onClick={(i) => this.handleSort()}>Sort</button>
           <MyComponent />
         </div>
       </div>
