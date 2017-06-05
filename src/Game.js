@@ -14,6 +14,7 @@ export default class Game extends React.Component {
       changed: [0],
       liClass: [0],
       sorted: false,
+      sclass: Array(9).fill("square"),
     };
   }
 
@@ -36,6 +37,7 @@ export default class Game extends React.Component {
       changed: changed,
       liClass: liClass,
     });
+    this.highlight(squares);
   }
 
   jumpTo(step) {
@@ -64,10 +66,34 @@ export default class Game extends React.Component {
     return i;
   }
 
+  highlight(squares) {
+    const lines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i];
+      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+        const sclass = this.state.sclass;
+        sclass[a] = "win";
+        sclass[b] = "win";
+        sclass[c] = "win";
+        this.setState({ sclass: sclass, });
+      }
+    }
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
+    const sclass = this.state.sclass;
     const locations = ["(0, 1)", "(0, 2)", "(0, 3)",
       "(1, 1)", "(1, 2)", "(1, 3)",
       "(2, 1)", "(2, 2)", "(2, 3)"];
@@ -93,6 +119,7 @@ export default class Game extends React.Component {
       <div className="game">
         <div className="game-board">
           <Board
+            sclass={sclass}
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
           />
