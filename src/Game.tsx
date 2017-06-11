@@ -1,10 +1,10 @@
-import * as React from 'react';
-import Board from './Board';
+import * as React from 'react'
+import Board from './Board'
 
 interface Props {}
 interface State {}
 
-export default class Game extends React.Component <Props, State>  {
+export default class Game extends React.Component <Props, State> {
   render() {
     return (
       <div className="game">
@@ -16,6 +16,6 @@ export default class Game extends React.Component <Props, State>  {
           <ol>{/* TODO */}</ol>
         </div>
       </div>
-    );
+    )
   }
 }

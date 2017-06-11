@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 
 interface Props {}
 interface State {}
@@ -9,6 +9,6 @@ export default class Square extends React.Component <Props, State> {
       <button className="square">
         {/* TODO */}
       </button>
-    );
+    )
   }
 }

@@ -1,16 +1,16 @@
-import * as React from 'react';
-import Square from './Square';
+import * as React from 'react'
+import Square from './Square'
 
 interface Props {}
 interface State {}
 
 export default class Board extends React.Component <Props, State>  {
   renderSquare(i: number) {
-    return <Square />;
+    return <Square />
   }
 
   render() {
-    const status = 'Next player: X';
+    const status = 'Next player: X'
 
     return (
       <div>
@@ -31,6 +31,6 @@ export default class Board extends React.Component <Props, State>  {
           {this.renderSquare(8)}
         </div>
       </div>
-    );
+    )
   }
 }
