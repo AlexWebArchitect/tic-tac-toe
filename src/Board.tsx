@@ -2,14 +2,14 @@ import * as React from 'react'
 import Square from './Square'
 
 interface Props {
-    squares: Array <any>
-    onClick(i: any): any
+    squares: Array <string>
+    onClick(i: number): void
 }
 interface State {}
 
 export default class Board extends React.Component <Props, State>  {
 
-    renderSquare(i: any) {
+    renderSquare(i: number) {
         return (
             <Square 
                 value={this.props.squares[i]}

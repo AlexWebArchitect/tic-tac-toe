@@ -18,9 +18,10 @@ export default class Game extends React.Component <Props, State> {
         }
     }
 
-    handleClick(i: any) {
-        const history: Array <any> = this.state.history
-        const current: any = history[history.length - 1]
+    handleClick(i: number): void {
+        const history = this.state.history
+        const current = history[history.length - 1]
+        console.log(current)
         const squares : Array <string> = current.squares.slice()
         if (calculateWinner(squares) || squares[i]) {
             return
@@ -35,9 +36,9 @@ export default class Game extends React.Component <Props, State> {
     }
 
     render() {
-        const history: Array <any> = this.state.history
-        const current: any = history[history.length - 1]
-        const winner: string = calculateWinner(current.squares)
+        const history = this.state.history
+        const current = history[history.length - 1]
+        const winner = calculateWinner(current.squares)
 
         let status: string
         if (winner) {
@@ -64,7 +65,7 @@ export default class Game extends React.Component <Props, State> {
 }
 
 
-function calculateWinner(squares: Array <any>) {
+function calculateWinner(squares: Array <string>) {
     const lines: Array <Array <number>> = [
         [0, 1, 2],
         [3, 4, 5],
