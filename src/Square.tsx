@@ -2,7 +2,7 @@ import * as React from 'react'
 
 interface Props {
     value: string
-    onClick(): void
+    onClick(): any
 }
 interface State {}
 

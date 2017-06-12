@@ -1,39 +1,26 @@
 import * as React from 'react'
 import Square from './Square'
 
-interface Props {}
-interface State {
-    squares: Array <string>
+interface Props {
+    squares: Array <any>
+    onClick(i: any): any
 }
+interface State {}
 
 export default class Board extends React.Component <Props, State>  {
-    constructor() {
-        super()
-        this.state = {
-            squares: Array(9).fill(null)
-        }
-    }
 
-    handleClick(i: number) {
-        const squares : Array <string> = this.state.squares.slice();
-        squares[i] = 'X';
-        this.setState({squares: squares});
-    }
-
-    renderSquare(i: number) {
+    renderSquare(i: any) {
         return (
             <Square 
-                value={this.state.squares[i]}
-                onClick={() => this.handleClick(i)}
+                value={this.props.squares[i]}
+                onClick={() => this.props.onClick(i)}
             />
         )
     }
 
     render() {
-        const status: string = 'Next player: X'
         return (
           <div>
-            <div className="status">{status}</div>
             <div className="board-row">
                 {this.renderSquare(0)}
                 {this.renderSquare(1)}
