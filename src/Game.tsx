@@ -4,6 +4,7 @@ import Board from './Board'
 interface Props {}
 interface State {
     history: Array <any>
+    stepNumber: number
     xIsNext: boolean
 }
 
@@ -14,14 +15,14 @@ export default class Game extends React.Component <Props, State> {
             history: [{
                 squares: Array(9).fill(null)
             }],
+            stepNumber: 0,
             xIsNext: true
         }
     }
 
     handleClick(i: number): void {
-        const history = this.state.history
+        const history = this.state.history.slice(0, this.state.stepNumber + 1)
         const current = history[history.length - 1]
-        console.log(current)
         const squares : Array <string> = current.squares.slice()
         if (calculateWinner(squares) || squares[i]) {
             return
@@ -31,14 +32,31 @@ export default class Game extends React.Component <Props, State> {
             history: history.concat([{
                 squares: squares
             }]),
+            stepNumber: history.length,
             xIsNext: !this.state.xIsNext
+        })
+    }
+
+    jumpTo(step: number): void {
+        this.setState({
+            stepNumber: step,
+            xIsNext: (step % 2) ? false : true
         })
     }
 
     render() {
         const history = this.state.history
-        const current = history[history.length - 1]
+        const current = history[this.state.stepNumber]
         const winner = calculateWinner(current.squares)
+
+        const moves = history.map((step: string, move: number) => {
+            const desc: string = move ? 'Move #' + move : 'Game start'
+            return (
+                <li key={move}>
+                    <a href="#" onClick={() => this.jumpTo(move)}>{desc}</a>
+                </li>
+            )
+        })
 
         let status: string
         if (winner) {
@@ -57,7 +75,7 @@ export default class Game extends React.Component <Props, State> {
                 </div>
                 <div className="game-info">
                     <div>{status}</div>
-                    <ol>{/* TODO */}</ol>
+                    <ol>{moves}</ol>
                 </div>
             </div>
         )
