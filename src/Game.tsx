@@ -6,6 +6,8 @@ interface State {
     history: Array <any>
     stepNumber: number
     xIsNext: boolean
+    changed: Array <number>
+    liClass: Array <string>
 }
 
 export default class Game extends React.Component <Props, State> {
@@ -16,7 +18,9 @@ export default class Game extends React.Component <Props, State> {
                 squares: Array(9).fill(null)
             }],
             stepNumber: 0,
-            xIsNext: true
+            xIsNext: true,
+            changed: [0],
+            liClass: [""]
         }
     }
 
@@ -24,6 +28,8 @@ export default class Game extends React.Component <Props, State> {
         const history = this.state.history.slice(0, this.state.stepNumber + 1)
         const current = history[history.length - 1]
         const squares : Array <string> = current.squares.slice()
+        const changed = this.state.changed.concat(i)
+        const liClass = this.state.liClass.concat("")
         if (calculateWinner(squares) || squares[i]) {
             return
         }
@@ -33,14 +39,21 @@ export default class Game extends React.Component <Props, State> {
                 squares: squares
             }]),
             stepNumber: history.length,
-            xIsNext: !this.state.xIsNext
+            xIsNext: !this.state.xIsNext,
+            changed: changed,
+            liClass: liClass
         })
     }
 
     jumpTo(step: number): void {
+        const changed = this.state.changed.splice(0, step + 1)
+        const liClass = this.state.liClass
+        liClass[step] = "bold"
         this.setState({
             stepNumber: step,
-            xIsNext: (step % 2) ? false : true
+            xIsNext: (step % 2) ? false : true,
+            changed: changed,
+            liClass: liClass
         })
     }
 
@@ -48,11 +61,16 @@ export default class Game extends React.Component <Props, State> {
         const history = this.state.history
         const current = history[this.state.stepNumber]
         const winner = calculateWinner(current.squares)
+        const locations: Array <string> = ["(0, 1)", "(0, 2)", "(0, 3)",
+                           "(1, 1)", "(1, 2)", "(1, 3)",
+                           "(2, 1)", "(2, 2)", "(2, 3)"];
 
         const moves = history.map((step: string, move: number) => {
-            const desc: string = move ? 'Move #' + move : 'Game start'
+            const desc: string = move
+            ? 'Move #' + move + ' at ' + locations[this.state.changed[move]]
+            : 'Game start'
             return (
-                <li key={move}>
+                <li key={move} className={this.state.liClass[move]}>
                     <a href="#" onClick={() => this.jumpTo(move)}>{desc}</a>
                 </li>
             )
