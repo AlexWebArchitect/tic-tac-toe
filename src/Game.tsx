@@ -8,6 +8,7 @@ interface State {
     xIsNext: boolean
     changed: Array <number>
     liClass: Array <string>
+    sorted: boolean
 }
 
 export default class Game extends React.Component <Props, State> {
@@ -20,7 +21,8 @@ export default class Game extends React.Component <Props, State> {
             stepNumber: 0,
             xIsNext: true,
             changed: [0],
-            liClass: [""]
+            liClass: [""],
+            sorted: false
         }
     }
 
@@ -57,6 +59,20 @@ export default class Game extends React.Component <Props, State> {
         })
     }
 
+    handleSort(): void {
+        this.setState(prevState => ({
+            sorted: !prevState.sorted
+        }))
+    }
+
+    sortMoves(i: Array <any>) {
+        if (this.state.sorted) {
+            let sortedMoves = i.reverse()
+            return sortedMoves
+        }
+        return i;
+    }
+
     render() {
         const history = this.state.history
         const current = history[this.state.stepNumber]
@@ -83,6 +99,7 @@ export default class Game extends React.Component <Props, State> {
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : '0')
         }
 
+        const sorted = this.sortMoves(moves)
         return (
             <div className="game">
                 <div className="game-board">
@@ -93,7 +110,8 @@ export default class Game extends React.Component <Props, State> {
                 </div>
                 <div className="game-info">
                     <div>{status}</div>
-                    <ol>{moves}</ol>
+                    <ol>{sorted}</ol>
+                    <button onClick={(i) => this.handleSort()}>Sort</button>
                 </div>
             </div>
         )
