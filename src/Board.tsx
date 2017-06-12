@@ -19,24 +19,20 @@ export default class Board extends React.Component <Props, State>  {
     }
 
     render() {
-        return (
-          <div>
-            <div className="board-row">
-                {this.renderSquare(0)}
-                {this.renderSquare(1)}
-                {this.renderSquare(2)}
-            </div>
-            <div className="board-row">
-                {this.renderSquare(3)}
-                {this.renderSquare(4)}
-                {this.renderSquare(5)}
-            </div>
-            <div className="board-row">
-                {this.renderSquare(6)}
-                {this.renderSquare(7)}
-                {this.renderSquare(8)}
-            </div>
-        </div>
-        )
+        let board = []
+        let rows = []
+        for (let i: number = 0; i < 9; i = i+3) {
+            for (let j: number = i; j < i+3; j++) {
+                rows.push(this.renderSquare(j))
+            }
+            board.push(
+                <div key = {i} className="board-row">
+                    {rows[i]}
+                    {rows[i+1]}
+                    {rows[i+2]}
+                </div>
+            )
+        }
+        return (<div>{board}</div>)
     }
 }
