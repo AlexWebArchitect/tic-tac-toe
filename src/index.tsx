@@ -109,6 +109,7 @@ class Game extends React.Component<GameProps, GameState> {
     }
 
     jumpTo(step: number): void {
+        const sclass = Array(9).fill('square');
         const changed = this.state.changed.splice(0, step + 1);
         const liClass = this.state.liClass;
         liClass[step] = 'bold';
@@ -116,7 +117,8 @@ class Game extends React.Component<GameProps, GameState> {
             stepNumber: step,
             xIsNext: (step % 2) ? false : true,
             changed: changed,
-            liClass: liClass
+            liClass: liClass,
+            sclass: sclass
         });
     }
 
@@ -126,7 +128,7 @@ class Game extends React.Component<GameProps, GameState> {
         }));
     }
 
-    sortMoves(i: Array<any>) {
+    sortMoves(i: JSX.Element[]) {
         if (this.state.sorted) {
             let sortedMoves = i.reverse();
             return sortedMoves;
@@ -134,7 +136,7 @@ class Game extends React.Component<GameProps, GameState> {
         return i;
     }
 
-    highlight(squares: Array<any>): void {
+    highlight(squares: Array<string>): void {
         const lines: Array<Array<number>> = [
             [0, 1, 2],
             [3, 4, 5],
@@ -203,7 +205,6 @@ class Game extends React.Component<GameProps, GameState> {
         );
     }
 }
-
 
 function calculateWinner(squares: Array<string>) {
     const lines: Array<Array<number>> = [
