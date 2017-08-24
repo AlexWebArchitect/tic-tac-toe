@@ -15,24 +15,18 @@ class Xor0Modal extends React.Component<Xor0ModalProps, Xor0ModalState> {
         if (!this.props.visible) { return null; }
         return (
             <div className="overlay">
-                <div className={"modal-dialog"}
-                    role="document"
-                    onClick={e => e.stopPropagation()}>
+                <div className={'modal-dialog'} role="document" onClick={e => e.stopPropagation()}>
                     <div className="modal-content">
                         <div className="modal-header">
                             <h4 className="modal-title">Player 1 : Would you like X or O?</h4>
                         </div>
                         <div id="Xor0" className="modal-body">
-                            <button type="button" 
-                                className="btn btn-primary"
-                                onClick={() => this.props.onClick(true)}>
-                                {"X"}
+                            <button type="button" className="btn btn-primary" onClick={() => this.props.onClick(true)}>
+                                X
                             </button>
                             <span>&nbsp;</span>
-                            <button type="button" 
-                                className="btn btn-primary"
-                                onClick={() => this.props.onClick(false)}>
-                                {"0"}
+                            <button type="button" className="btn btn-primary" onClick={() => this.props.onClick(false)}>
+                                0
                             </button>
                         </div>
                     </div>
@@ -200,7 +194,11 @@ class Game extends React.Component<GameProps, GameState> {
     }
 
     Xor0(x: boolean) {
-        console.log(x);
+        if (x) {
+            this.setState({ xIsNext: true, Xor0Modal: false });
+        } else {
+            this.setState({ xIsNext: false, Xor0Modal: false });
+        }
     }
 
     render() {
