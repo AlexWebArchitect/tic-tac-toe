@@ -4,6 +4,44 @@ import './index.css';
 
 // ========================================
 
+interface Xor0ModalProps {
+    visible: boolean;
+    onClick(x: boolean): void;
+}
+interface Xor0ModalState { }
+
+class Xor0Modal extends React.Component<Xor0ModalProps, Xor0ModalState> {
+    render() {
+        if (!this.props.visible) { return null; }
+        return (
+            <div className="overlay">
+                <div className={"modal-dialog"}
+                    role="document"
+                    onClick={e => e.stopPropagation()}>
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h4 className="modal-title">Player 1 : Would you like X or O?</h4>
+                        </div>
+                        <div id="Xor0" className="modal-body">
+                            <button type="button" 
+                                className="btn btn-primary"
+                                onClick={() => this.props.onClick(true)}>
+                                {"X"}
+                            </button>
+                            <span>&nbsp;</span>
+                            <button type="button" 
+                                className="btn btn-primary"
+                                onClick={() => this.props.onClick(false)}>
+                                {"0"}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+
 interface SquareProps {
     sclass: string;
     value: string;
@@ -68,6 +106,7 @@ interface GameState {
     liClass: Array<string>;
     sorted: boolean;
     sclass: Array<string>;
+    Xor0Modal: boolean;
 }
 
 class Game extends React.Component<GameProps, GameState> {
@@ -82,7 +121,8 @@ class Game extends React.Component<GameProps, GameState> {
             changed: [0],
             liClass: [''],
             sorted: false,
-            sclass: Array(9).fill('square')
+            sclass: Array(9).fill('square'),
+            Xor0Modal: true
         };
     }
 
@@ -159,6 +199,10 @@ class Game extends React.Component<GameProps, GameState> {
         }
     }
 
+    Xor0(x: boolean) {
+        console.log(x);
+    }
+
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
@@ -189,6 +233,7 @@ class Game extends React.Component<GameProps, GameState> {
         const sorted = this.sortMoves(moves);
         return (
             <div className="game">
+                <Xor0Modal visible={this.state.Xor0Modal} onClick={(x) => this.Xor0(x)} />
                 <div className="game-board">
                     <Board
                         sclass={sclass}
