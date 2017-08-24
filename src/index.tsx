@@ -101,6 +101,7 @@ interface GameState {
     sorted: boolean;
     sclass: Array<string>;
     Xor0Modal: boolean;
+    start: boolean;
 }
 
 class Game extends React.Component<GameProps, GameState> {
@@ -116,7 +117,8 @@ class Game extends React.Component<GameProps, GameState> {
             liClass: [''],
             sorted: false,
             sclass: Array(9).fill('square'),
-            Xor0Modal: true
+            Xor0Modal: true,
+            start: true
         };
     }
 
@@ -146,10 +148,17 @@ class Game extends React.Component<GameProps, GameState> {
         const sclass = Array(9).fill('square');
         const changed = this.state.changed.splice(0, step + 1);
         const liClass = this.state.liClass;
+        const start = this.state.start;
+        let xIsNext = true;
+        if (start) {
+            xIsNext = (step % 2) ? false : true;
+        } else {
+            xIsNext = (step % 2) ? true : false;
+        }
         liClass[step] = 'bold';
         this.setState({
             stepNumber: step,
-            xIsNext: (step % 2) ? false : true,
+            xIsNext: xIsNext,
             changed: changed,
             liClass: liClass,
             sclass: sclass
@@ -195,9 +204,9 @@ class Game extends React.Component<GameProps, GameState> {
 
     Xor0(x: boolean) {
         if (x) {
-            this.setState({ xIsNext: true, Xor0Modal: false });
+            this.setState({ xIsNext: true, Xor0Modal: false, start: true });
         } else {
-            this.setState({ xIsNext: false, Xor0Modal: false });
+            this.setState({ xIsNext: false, Xor0Modal: false, start: false });
         }
     }
 
