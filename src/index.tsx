@@ -4,6 +4,38 @@ import './index.css';
 
 // ========================================
 
+interface OneOrTwoProps {
+    visible: boolean;
+    onClick(p: boolean): void;
+}
+interface OneOrTwoState { }
+
+class OneOrTwoModal extends React.Component<OneOrTwoProps, OneOrTwoState> {
+    render() {
+        if (!this.props.visible) { return null; }
+        return (
+            <div className="overlay">
+                <div className={'modal-dialog'} role="document" onClick={e => e.stopPropagation()}>
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h4 className="modal-title">How do you want to play?</h4>
+                        </div>
+                        <div id="Xor0" className="modal-body">
+                            <button type="button" className="btn btn-primary" onClick={() => this.props.onClick(true)}>
+                                One player
+                            </button>
+                            <span>&nbsp;</span>
+                            <button type="button" className="btn btn-primary" onClick={() => this.props.onClick(false)}>
+                                Two player
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+
 interface Xor0ModalProps {
     visible: boolean;
     onClick(x: boolean): void;
@@ -102,6 +134,8 @@ interface GameState {
     sclass: Array<string>;
     Xor0Modal: boolean;
     start: boolean;
+    OneOrTwoModal: boolean;
+    OnePlayer: boolean;
 }
 
 class Game extends React.Component<GameProps, GameState> {
@@ -118,7 +152,9 @@ class Game extends React.Component<GameProps, GameState> {
             sorted: false,
             sclass: Array(9).fill('square'),
             Xor0Modal: true,
-            start: true
+            start: true,
+            OneOrTwoModal: true,
+            OnePlayer: false
         };
     }
 
@@ -210,6 +246,14 @@ class Game extends React.Component<GameProps, GameState> {
         }
     }
 
+    OneOrTwo(p: boolean) {
+        if (p) {
+            this.setState({ OnePlayer: true, OneOrTwoModal: false });
+        } else {
+            this.setState({ OnePlayer: false, OneOrTwoModal: false });
+        }
+    }
+
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
@@ -241,6 +285,7 @@ class Game extends React.Component<GameProps, GameState> {
         return (
             <div className="game">
                 <Xor0Modal visible={this.state.Xor0Modal} onClick={(x) => this.Xor0(x)} />
+                <OneOrTwoModal visible={this.state.OneOrTwoModal} onClick={(p) => this.OneOrTwo(p)} />
                 <div className="game-board">
                     <Board
                         sclass={sclass}
