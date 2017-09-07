@@ -123,9 +123,13 @@ class Board extends React.Component<BoardProps, BoardState>  {
     }
 }
 
+interface Current {
+    squares: Array <string>;
+}
+
 interface GameProps { }
 interface GameState {
-    history: Array<any>;
+    history: Array<Current>;
     stepNumber: number;
     xIsNext: boolean;
     changed: Array<number>;
@@ -164,6 +168,7 @@ class Game extends React.Component<GameProps, GameState> {
         const squares: Array<string> = current.squares.slice();
         const changed = this.state.changed.concat(i);
         const liClass = this.state.liClass.concat('');
+        const computer = this.state.OnePlayer;
         if (calculateWinner(squares) || squares[i]) {
             return;
         }
@@ -178,6 +183,7 @@ class Game extends React.Component<GameProps, GameState> {
             liClass: liClass
         });
         this.highlight(squares);
+        setTimeout(() => { if (computer) { this.calculateTurn(); } }, 1000);
     }
 
     jumpTo(step: number): void {
@@ -254,6 +260,33 @@ class Game extends React.Component<GameProps, GameState> {
         }
     }
 
+    calculateTurn() {
+        const spot = 4;
+        this.turn(spot);
+    }
+
+    turn(n: number) {
+        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        const current = history[history.length - 1];
+        const squares: Array<string> = current.squares.slice();
+        const changed = this.state.changed.concat(n);
+        const liClass = this.state.liClass.concat('');
+        if (calculateWinner(squares) || squares[n]) {
+            return;
+        }
+        squares[n] = this.state.xIsNext ? 'X' : '0';
+        this.setState({
+            history: history.concat([{
+                squares: squares
+            }]),
+            stepNumber: history.length,
+            xIsNext: !this.state.xIsNext,
+            changed: changed,
+            liClass: liClass
+        });
+        this.highlight(squares);
+    }
+
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
@@ -263,7 +296,7 @@ class Game extends React.Component<GameProps, GameState> {
             '(1, 1)', '(1, 2)', '(1, 3)',
             '(2, 1)', '(2, 2)', '(2, 3)'];
 
-        const moves = history.map((step: string, move: number) => {
+        const moves = history.map((step: Current, move: number) => {
             const desc: string = move
                 ? 'Move #' + move + ' at ' + locations[this.state.changed[move]]
                 : 'Game start';
