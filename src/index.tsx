@@ -124,7 +124,7 @@ class Board extends React.Component<BoardProps, BoardState>  {
 }
 
 interface Current {
-    squares: Array <string>;
+    squares: Array<string>;
 }
 
 interface GameProps { }
@@ -187,6 +187,7 @@ class Game extends React.Component<GameProps, GameState> {
     }
 
     jumpTo(step: number): void {
+        const computer = this.state.OnePlayer;
         const sclass = Array(9).fill('square');
         const changed = this.state.changed.splice(0, step + 1);
         const liClass = this.state.liClass;
@@ -205,6 +206,7 @@ class Game extends React.Component<GameProps, GameState> {
             liClass: liClass,
             sclass: sclass
         });
+        setTimeout(() => { if (computer && (step + 1) % 2 === 0 && step !== 0) { this.calculateTurn(); } }, 1000);
     }
 
     handleSort(): void {
@@ -261,7 +263,12 @@ class Game extends React.Component<GameProps, GameState> {
     }
 
     calculateTurn() {
-        const spot = 4;
+        let spot: number;
+        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        const current = history[history.length - 1];
+        const squares: Array<string> = current.squares.slice();
+        spot = 0;
+        if (squares[4] === null) { spot = 4; }
         this.turn(spot);
     }
 
