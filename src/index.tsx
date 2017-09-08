@@ -267,8 +267,11 @@ class Game extends React.Component<GameProps, GameState> {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const squares: Array<string> = current.squares.slice();
-        spot = 0;
-        if (squares[4] === null) { spot = 4; }
+        if (squares[4] === null) {
+            spot = 4;
+        } else {
+            spot = 2;
+        }
         this.turn(spot);
     }
 
