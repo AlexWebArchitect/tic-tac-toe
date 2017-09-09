@@ -264,13 +264,47 @@ class Game extends React.Component<GameProps, GameState> {
 
     calculateTurn() {
         let spot: number;
+        spot = 9;
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const squares: Array<string> = current.squares.slice();
-        if (squares[4] === null) {
-            spot = 4;
-        } else {
-            spot = 2;
+        const lines = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6],
+        ];
+        if (squares[4] === null) { 
+            spot = 4; 
+        } else if (squares[0] === null) { 
+            spot = 0; 
+        } else if (squares[2] === null) { 
+            spot = 2; 
+        } else if (squares[6] === null) { 
+            spot = 6; 
+        } else if (squares[8] === null) { 
+            spot = 8; 
+        }
+        for (let i: number = 0; i < lines.length; i++) {
+            const [a, b, c] = lines[i];
+            if (squares[b] === squares[c] && squares[a] === null && squares[b] !== null) {
+                spot = a;
+            } else if (squares[a] === squares[c] && squares[b] === null && squares[a] !== null) {
+                spot = b;
+            } else if (squares[a] === squares[b] && squares[c] === null && squares[a] !== null) {
+                spot = c;
+            }
+        }
+        if (spot === 9) {
+            for (let q = 0; q < 9; q++) {
+                if (squares[q] === null) {
+                    spot = q;
+                }
+            }
         }
         this.turn(spot);
     }
