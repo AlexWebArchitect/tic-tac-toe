@@ -278,6 +278,10 @@ class Game extends React.Component<GameProps, GameState> {
             [0, 4, 8],
             [2, 4, 6],
         ];
+        const tricks = [
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
         if (squares[4] === null) { 
             spot = 4; 
         } else if (squares[0] === null) { 
@@ -289,14 +293,62 @@ class Game extends React.Component<GameProps, GameState> {
         } else if (squares[8] === null) { 
             spot = 8; 
         }
-        for (let i: number = 0; i < lines.length; i++) {
-            const [a, b, c] = lines[i];
-            if (squares[b] === squares[c] && squares[a] === null && squares[b] !== null) {
-                spot = a;
-            } else if (squares[a] === squares[c] && squares[b] === null && squares[a] !== null) {
-                spot = b;
-            } else if (squares[a] === squares[b] && squares[c] === null && squares[a] !== null) {
-                spot = c;
+        if (this.state.start) {
+            for (let i: number = 0; i < tricks.length; i++) {
+                const [a, b, c] = tricks[i];
+                if (squares[a] === 'X' && squares[b] === '0' && squares[c] === 'X') {
+                    for (let q = 0; q < 9; q++) {
+                        if (squares[q] === null && (q % 2) !== 0) {
+                            spot = q;
+                        }
+                    }
+                }
+            }
+        }
+        if (this.state.start) {
+            for (let i: number = 0; i < lines.length; i++) {
+                const [a, b, c] = lines[i];
+                if (squares[b] === squares[c] && squares[a] === null && squares[b] === 'X') {
+                    spot = a;
+                } else if (squares[a] === squares[c] && squares[b] === null && squares[a] === 'X') {
+                    spot = b;
+                } else if (squares[a] === squares[b] && squares[c] === null && squares[a] === 'X') {
+                    spot = c;
+                }
+            }
+        } else {
+            for (let i: number = 0; i < lines.length; i++) {
+                const [a, b, c] = lines[i];
+                if (squares[b] === squares[c] && squares[a] === null && squares[b] === '0') {
+                    spot = a;
+                } else if (squares[a] === squares[c] && squares[b] === null && squares[a] === '0') {
+                    spot = b;
+                } else if (squares[a] === squares[b] && squares[c] === null && squares[a] === '0') {
+                    spot = c;
+                }
+            }
+        }
+        if (this.state.start) {
+            for (let i: number = 0; i < lines.length; i++) {
+                const [a, b, c] = lines[i];
+                if (squares[b] === squares[c] && squares[a] === null && squares[b] === '0') {
+                    spot = a;
+                } else if (squares[a] === squares[c] && squares[b] === null && squares[a] === '0') {
+                    spot = b;
+                } else if (squares[a] === squares[b] && squares[c] === null && squares[a] === '0') {
+                    spot = c;
+                }
+            }
+        } else {
+            for (let i: number = 0; i < lines.length; i++) {
+                const [a, b, c] = lines[i];
+                if (squares[b] === squares[c] && squares[a] === null && squares[b] === 'X') {
+                    spot = a;
+                } else if (squares[a] === squares[c] && squares[b] === null && squares[a] === 'X') {
+                    spot = b;
+                } else if (squares[a] === squares[b] && squares[c] === null && squares[a] === 'X') {
+                    spot = c;
+                }
             }
         }
         if (spot === 9) {
