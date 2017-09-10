@@ -258,7 +258,7 @@ class Game extends React.Component<GameProps, GameState> {
         if (p) {
             this.setState({ OnePlayer: true, OneOrTwoModal: false });
         } else {
-            this.setState({ OnePlayer: false, OneOrTwoModal: false });
+            this.setState({ OnePlayer: false, OneOrTwoModal: false, Xor0Modal: false });
         }
     }
 
