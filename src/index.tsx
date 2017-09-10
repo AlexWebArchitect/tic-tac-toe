@@ -193,11 +193,7 @@ class Game extends React.Component<GameProps, GameState> {
         const liClass = this.state.liClass;
         const start = this.state.start;
         let xIsNext = true;
-        if (start) {
-            xIsNext = (step % 2) ? false : true;
-        } else {
-            xIsNext = (step % 2) ? true : false;
-        }
+        xIsNext = (step % 2) ? false : true;
         liClass[step] = 'bold';
         this.setState({
             stepNumber: step,
@@ -206,7 +202,11 @@ class Game extends React.Component<GameProps, GameState> {
             liClass: liClass,
             sclass: sclass
         });
-        setTimeout(() => { if (computer && (step + 1) % 2 === 0 && step !== 0) { this.calculateTurn(); } }, 1000);
+        if (start) {
+            setTimeout(() => { if (computer && (step + 1) % 2 === 0 && step !== 0) { this.calculateTurn(); } }, 1000);
+        } else {
+            setTimeout(() => { if (computer && step % 2 === 0) { this.calculateTurn(); } }, 1000);
+        }
     }
 
     handleSort(): void {
@@ -251,6 +251,7 @@ class Game extends React.Component<GameProps, GameState> {
             this.setState({ xIsNext: true, Xor0Modal: false, start: true });
         } else {
             this.setState({ xIsNext: false, Xor0Modal: false, start: false });
+            this.calculateTurn();
         }
     }
 
@@ -263,8 +264,7 @@ class Game extends React.Component<GameProps, GameState> {
     }
 
     calculateTurn() {
-        let spot: number;
-        spot = 9;
+        let spot = 9;
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const squares: Array<string> = current.squares.slice();
