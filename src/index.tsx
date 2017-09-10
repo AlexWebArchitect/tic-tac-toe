@@ -282,6 +282,11 @@ class Game extends React.Component<GameProps, GameState> {
             [0, 4, 8],
             [2, 4, 6]
         ];
+        const atricks = [
+            [0, 4, 7],
+            [5, 4, 6],
+            [2, 4, 7]
+        ];
         if (squares[4] === null) { 
             spot = 4; 
         } else if (squares[0] === null) { 
@@ -302,6 +307,14 @@ class Game extends React.Component<GameProps, GameState> {
                             spot = q;
                         }
                     }
+                }
+            }
+        }
+        if (this.state.start) {
+            for (let i: number = 0; i < atricks.length; i++) {
+                const [a, b, c] = atricks[i];
+                if (squares[a] === 'X' && squares[b] === '0' && squares[c] === 'X' && squares[8] === null) {
+                    spot = 8;
                 }
             }
         }
