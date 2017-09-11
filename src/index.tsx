@@ -183,7 +183,8 @@ class Game extends React.Component<GameProps, GameState> {
             liClass: liClass
         });
         this.highlight(squares);
-        setTimeout(() => { if (computer) { this.calculateTurn(); } }, 1000);
+        this.draw();
+        setTimeout(() => { if (computer) { this.calculateTurn(); } }, 500);
     }
 
     jumpTo(step: number): void {
@@ -203,9 +204,9 @@ class Game extends React.Component<GameProps, GameState> {
             sclass: sclass
         });
         if (start) {
-            setTimeout(() => { if (computer && (step + 1) % 2 === 0 && step !== 0) { this.calculateTurn(); } }, 1000);
+            setTimeout(() => { if (computer && (step + 1) % 2 === 0 && step !== 0) { this.calculateTurn(); } }, 500);
         } else {
-            setTimeout(() => { if (computer && step % 2 === 0) { this.calculateTurn(); } }, 1000);
+            setTimeout(() => { if (computer && step % 2 === 0) { this.calculateTurn(); } }, 500);
         }
     }
 
@@ -242,6 +243,7 @@ class Game extends React.Component<GameProps, GameState> {
                 sclass[b] = 'win';
                 sclass[c] = 'win';
                 this.setState({ sclass: sclass });
+                setTimeout(() => { this.jumpTo(0); }, 2000);
             }
         }
     }
@@ -394,6 +396,19 @@ class Game extends React.Component<GameProps, GameState> {
             liClass: liClass
         });
         this.highlight(squares);
+        this.draw();
+    }
+
+    draw() {
+        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        const current = history[history.length - 1];
+        const squares: Array<string> = current.squares.slice();
+        for (let i: number = 0; i < squares.length; i++) {
+            if (squares[i] === null) {
+                return;
+            }
+        }
+        setTimeout(() => { this.jumpTo(0); }, 2000);
     }
 
     render() {
